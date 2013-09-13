@@ -20,6 +20,9 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 import os
+import sys
+import time
+import subprocess
 
 __addon__      = xbmcaddon.Addon()
 __cwd__        = __addon__.getAddonInfo('path')
@@ -31,6 +34,21 @@ __language__   = __addon__.getLocalizedString
 
 __profile__    = xbmc.translatePath( __addon__.getAddonInfo('profile') )
 __resource__   = xbmc.translatePath( os.path.join( __cwd__, 'resources', 'lib' ) )
+
+## Copyright (C) 2009-2010 OpenELEC.tv ##
+__start__      = xbmc.translatePath( os.path.join( __cwd__, 'resources', 'bin', "boblightd.start") )
+__stop__       = xbmc.translatePath( os.path.join( __cwd__, 'resources', 'bin', "boblightd.stop") )
+
+#make binary files executable in adson bin folder
+subprocess.Popen("chmod -R +x " + __cwd__ + "/resources/bin/*" , shell=True, close_fds=True)
+
+subprocess.Popen(__start__, shell=True, close_fds=True)
+
+while (not xbmc.abortRequested):
+  time.sleep(0.250)
+
+subprocess.Popen(__stop__, shell=True, close_fds=True)
+## End copyright ##
 
 sys.path.append (__resource__)
 
